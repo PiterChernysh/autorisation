@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>User registration</title>
+</head>
+<body>
+
+    <form id="login">
+        <p><a href="/api/auth">User Authorization</a></p><br>
+        <p>Welcome to User registration</p>
+        <p id="regist"></p>
+        <input type="email" id="email" /><br />
+        <input type="password" id="password" /><br />
+        <input type="submit" value="check in" /><br />
+    </form>
+<script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous">
+</script>
+<script>
+    $("#login").on('submit', (e) => {
+        e.preventDefault();
+       
+        $.ajax({
+            method: "POST",
+            url: "/api/user/register",
+            // contentType: "application/json",
+            data: { email: $("#email").val(), password: $("#password").val() },
+        })
+            .then(function (result) {
+                console.log(result.result.email)
+                $("#regist").text(result.result.email+"  Registration completed" );
+            })
+            .then(function( msg ) {
+                
+            })
+            .catch( (e) => $("#regist").text("This login already exists") );
+    });
+</script>
+</body>
+</html>

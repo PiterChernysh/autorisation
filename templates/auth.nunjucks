@@ -1,0 +1,59 @@
+<html>
+<head>
+    <title>User Authorization</title>
+</head>
+<body>
+
+<div id="mydiv">
+{% if user.email %}
+    <p><a href="/api/user/profile">User Profile</a></p><br>
+    User login as: {{ user.email }}
+    <form id="logout">
+        <input type="submit" value="logout"/>
+    </form>
+{% else %}
+    <form id="login">
+        <p><a href="/api/user">User registration</a></p><br>
+        <p>Welcome to User Authorization</p>
+        <p id="regist"></p>
+        <input type="email" id="email" /><br />
+        <input type="password" id="password" /><br />
+        <input type="submit" value="log in" /><br />
+        
+    </form>
+{% endif %}
+</div>
+<script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous">
+</script>
+<script>
+    $("#login").on('submit', (e) => {
+        e.preventDefault();
+        console.log($("#email").val());
+        $.ajax({
+            method: "POST",
+            url: "/api/auth",
+            // contentType: "application/json",
+            data: { username: $("#email").val(), password: $("#password").val() },
+        })
+            .then(function( msg ) {
+                $('#mydiv').load(document.URL +  ' #mydiv');
+            })
+            .catch( (e) => $("#regist").text("Username or password is incorrect") );
+    });
+    $("#logout").on('submit', (e) => {
+        e.preventDefault();
+        $.ajax({
+            method: "GET",
+            url: "/api/auth/logout",
+        })
+            .then(function( msg ) {
+                location.reload();
+            })
+            .catch( (e) => $("#regist").text("User is not authorized") );
+    });
+</script>
+</body>
+</html>

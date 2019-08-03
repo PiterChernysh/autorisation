@@ -1,0 +1,36 @@
+<html>
+<head>
+    <title>User profile</title>
+</head>
+<body>
+<div id="mydiv">
+    <p><a href="/api/auth">User Authorization</a></p>
+    <p>Welcome to User profile</p><br>
+    <p id="regist"></p>
+    <div id="content"></div>
+</div>
+<script>
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous">
+</script>
+<script>
+$.ajax({
+            method: "POST",
+            url: "/api/user/profile",
+        })
+            .then(function( msg ) {
+                let div = document.createElement('div');
+                div.className = 'row';
+                let sum = "";
+                for (let name in msg[0]) {
+                    let str = name + " : " + msg[0][name];
+                    sum += `<p>${str}</p>`;
+                }
+                div.innerHTML = sum;
+                document.getElementById('content').appendChild(div);
+            })
+            .catch( (e) => $("#regist").text("User is not authorized") );
+</script>
+</body>
+</html>
